@@ -14,6 +14,21 @@ require_once("config.php");
 
 
 //Carrega uma lista de usuarios pelo login
-$search = Usuario::search("jo");
-echo json_encode($search);
+//$search = Usuario::search("jo");
+//echo json_encode($search);
+
+//INSERT
+//$aluno = new Usuario();
+//$aluno->setDeslogin("aluno");
+//$aluno->setDessenha("@alu0");
+//$aluno->insert();
+//echo $aluno;
+
+
+$usuario = new Usuario();
+$usuario->loadbyID(4);
+$usuario->update("professor", "aaaaa");
+
+echo $usuario;
+
  ?>

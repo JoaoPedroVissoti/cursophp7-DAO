@@ -48,12 +48,9 @@ class Usuario{
 		));
 
 		if (count($results) > 0) {
-			$row = $results[0];
+			
+			$this->setData($results[0]);
 
-			$this->setIdusuario($row['idusuario']);
-			$this->setDeslogin($row['deslogin']);
-			$this->setDessenha($row['dessenha']);
-			$this->setDtcadastros(new DateTime($row['dtcadastros']));
 		}
 	}
 
@@ -67,6 +64,43 @@ class Usuario{
 
 		return $sql->select("SELECT * FROM tb_usuarios WHERE deslogin LIKE :SEARCH ORDER BY deslogin", array(
 			':SEARCH'=>"%".$login."%"
+		));
+	}
+
+
+	public function setData($data){
+
+		$this->setIdusuario($data['idusuario']);
+		$this->setDeslogin($data['deslogin']);
+		$this->setDessenha($data['dessenha']);
+		$this->setDtcadastros(new DateTime($data['dtcadastros']));
+	}
+
+	public function insert(){
+		$sql = new Sql();	
+
+		$results = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", array(
+			':LOGIN'=>$this->getDeslogin(),
+			':PASSWORD'=>$this->getDessenha()
+		));
+
+		if (count($results) > 0){
+			$this->setData($results[0]);
+		}
+
+	}
+
+	public function update($login, $password){
+
+		$this->setDeslogin($login);
+		$this->setDessenha($password);
+
+		$sql = new Sql();
+
+		$sql->query("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASSWORD WHERE idusuario = :ID", array(
+			':LOGIN'=>$this->getDeslogin(),
+			':PASSWORD'=>$this->getDessenha(),
+			':ID'=>$this->getIdusuario()
 		));
 	}
 
